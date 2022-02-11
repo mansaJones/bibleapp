@@ -1,0 +1,149 @@
+# --------------------------------- #
+# Following Environment Variables need to be configured for CICD
+# --------------------------------- #
+#
+# 1] DEVELOPER_EMAIL - Email of the developer who is responsible for the CICD pipeline.
+#
+# 2] MMWEBHOOKURL - URL of the Mattermost webhook. Build link will be shared here.
+#
+# 3] UPLOAD_TOKEN - Header token used to upload build on the server.
+#
+# 4] UPLOAD_URL - URL on which the build has to be uploaded.
+#
+# --------------------------------- #
+#
+stages:
+  - develop
+  - staging
+  - beta-release
+  - appStore-release
+  # - document
+# ****************************** #
+variables:
+
+  # ADD EMAIL ADDRESS HERE.
+  EMAILS: 'akash.thakkar@indianic.com,tarun@indianic.com,chintan.shah@indianic.com,ankur.soni@indianic.com'  ######## <--
+
+  # DO NOT ADD SPACE IN THE APP NAME
+  APP_NAME: "BibleGamifiedApp"                             ######## <-- CHANGE THIS
+
+  WORKSPACE: BibleGamifiedApp.xcworkspace                  ######## <-- CHANGE THIS
+  PROJECT: BibleGamifiedApp.xcodeproj                      ######## <-- CHANGE THIS
+
+  SCHEME: BibleGamifiedApp
+  # REPLACE THIS WITH YOUR APP DISPLAY NAME
+  SCHEME_IPA: BibleGamifiedApp.ipa                         ######## <-- CHANGE THIS
+
+  SCHEME_STAGING: BibleGamifiedApp_Staging_App
+  # REPLACE THIS WITH YOUR APP DISPLAY NAME
+  STAGING_IPA: BibleGamifiedApp.ipa               ######## <-- CHANGE THIS
+
+  SCHEME_RELEASE: BibleGamifiedApp_Release_App
+  # REPLACE THIS WITH YOUR APP DISPLAY NAME
+  RELEASE_IPA: BibleGamifiedApp.ipa               ######## <-- CHANGE THIS
+
+# ****************************** #
+before_script:
+ - rm -rf $PWD/Build/*
+ - ./create-keychain.sh
+ - pod install
+# ****************************** #
+Develop Build:
+  stage: develop
+  environment:
+    name: development
+  script:
+   - ./build.sh
+   - xcodebuild clean -workspace $WORKSPACE -scheme $SCHEME
+   - xcodebuild -workspace $WORKSPACE -scheme $SCHEME -destination generic/platform=iOS build -configuration Debug archive -archivePath $PWD/Build/$SCHEME.xcarchive
+   - xcodebuild -exportArchive -archivePath $PWD/Build/$SCHEME.xcarchive -exportPath $PWD/Build/ -exportOptionsPlist $PWD/ExportOptions.plist
+   - responseiOS=$(curl $UPLOAD_URL -F file=@$PWD/Build/$SCHEME_IPA -F client_email='$EMAILS' -F developer_email=$DEVELOPER_EMAIL -F token=$UPLOAD_TOKEN)
+   - echo $responseiOS
+   - curl -i -X POST --data-urlencode 'payload={"text":"#### '$APP_NAME'\n**Development Build**\n'$responseiOS'"}' $MMWEBHOOKURL
+  tags:
+    - IOS
+    - Xcode
+    - Mac
+  only:
+    - develop # NAME OF THE BRANCH ON WHICH YOU WANT TO RUN THIS.
+  artifacts:
+    paths:
+    - Build/$SCHEME_IPA
+    expire_in: 1 day
+# ****************************** #
+QA Build:
+  stage: staging
+  environment:
+    name: qa_testing
+  script:
+    - ./build.sh
+    - xcodebuild clean -workspace $WORKSPACE -scheme $SCHEME_STAGING
+    - xcodebuild -workspace $WORKSPACE -scheme $SCHEME_STAGING -destination generic/platform=iOS build -configuration Staging archive -archivePath $PWD/Build/$SCHEME_STAGING.xcarchive
+    - xcodebuild -exportArchive -archivePath $PWD/Build/$SCHEME_STAGING.xcarchive -exportPath $PWD/Build/ -exportOptionsPlist $PWD/ExportOptions-Staging.plist
+    - response=$(curl $UPLOAD_URL -F file=@$PWD/Build/$STAGING_IPA -F client_email='$EMAILS' -F developer_email=$DEVELOPER_EMAIL -F token=$UPLOAD_TOKEN)
+    - curl -i -X POST --data-urlencode 'payload={"text":"#### '$APP_NAME'\n**Staging Build**\n'$response'"}' $MMWEBHOOKURL
+  tags:
+    - IOS
+    - Xcode
+    - Mac
+  only:
+    - staging # NAME OF THE BRANCH ON WHICH YOU WANT TO RUN THIS.
+  artifacts:
+    paths:
+    - Build/$STAGING_IPA
+    expire_in: 1 day
+# ****************************** #
+Client Build:
+  stage: beta-release
+  environment:
+    name: client_release
+  script:
+    - ./build.sh
+    - xcodebuild clean -workspace $WORKSPACE -scheme $SCHEME_RELEASE
+    - xcodebuild -workspace $WORKSPACE -scheme $SCHEME_RELEASE -destination generic/platform=iOS build -configuration Release archive -archivePath $PWD/Build/$SCHEME_RELEASE.xcarchive
+    - xcodebuild -exportArchive -archivePath $PWD/Build/$SCHEME_RELEASE.xcarchive -exportPath $PWD/Build/ -exportOptionsPlist $PWD/ExportOptions-Staging.plist
+    - response=$(curl $UPLOAD_URL -F file=@$PWD/Build/$RELEASE_IPA -F client_email='$EMAILS' -F developer_email=$DEVELOPER_EMAIL -F token=$UPLOAD_TOKEN)
+    - curl -i -X POST --data-urlencode 'payload={"text":"#### '$APP_NAME'\n**Client Build**\n'$response'"}' $MMWEBHOOKURL
+  tags:
+    - IOS
+    - Xcode
+    - Mac
+  only:
+    - beta-release # NAME OF THE BRANCH ON WHICH YOU WANT TO RUN THIS.
+  artifacts:
+    paths:
+    - Build/$RELEASE_IPA
+    expire_in: 1 day
+# ****************************** #
+AppStore:
+  stage: appStore-release
+  environment:
+    name: appStore_release
+  script:
+    - ./build.sh
+    - xcodebuild clean -workspace $WORKSPACE -scheme $SCHEME_RELEASE
+    - xcodebuild -workspace $WORKSPACE -scheme $SCHEME_RELEASE -destination generic/platform=iOS build -configuration Release archive -archivePath $PWD/Build/$SCHEME_RELEASE.xcarchive
+    - xcodebuild -exportArchive -archivePath $PWD/Build/$SCHEME_RELEASE.xcarchive -exportPath $PWD/Build/ -exportOptionsPlist $PWD/ExportOptions-itunes.plist
+    - curl -i -X POST --data-urlencode 'payload={"text":"#### '$APP_NAME'\n**Testflight/Distribution Build**\nPlease check status from [(GitLab)](http://git.indianic.com/) CI/CD panel"}' $MMWEBHOOKURL
+  tags:
+    - IOS
+    - Xcode
+    - Mac
+  only:
+    - production-release # NAME OF THE BRANCH ON WHICH YOU WANT TO RUN THIS.
+  artifacts:
+    paths:
+    - Build/$SCHEME_RELEASE.xcarchive
+    expire_in: 1 day
+
+# ****************************** #
+
+# Document Generate:
+#   stage: document
+#   script:
+#     - jazzy --min-acl internal
+#   only:
+#     - master
+#   artifacts:
+#     paths:
+#     - docs/

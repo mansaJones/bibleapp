@@ -1,0 +1,13 @@
+//
+//  Release.xcconfig
+//  BibleGamifiedApp
+//
+//  Created by indianic on 16/11/21.
+//
+
+AppName = BibleGamifiedAppRelease
+AppVersion = 1.0
+BundleVersion = 1
+BundleId = com.BibleGamifiedApp
+BACKEND_URL = heroesofbibledev.inic.cloud/laravel-api/public/
+//heroesofbible.inic.cloud/laravel-api/public

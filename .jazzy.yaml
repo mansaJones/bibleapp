@@ -1,0 +1,9 @@
+author: [APP NAME]
+author_url: https://www.indianic.com/
+clean: true
+skip_undocumented: true
+module: BibleGamifiedApp
+output: docs
+theme: apple
+xcodebuild_arguments: [-workspace, 'BibleGamifiedApp.xcworkspace', -scheme, 'BibleGamifiedApp']
+exclude: ["BibleGamifiedApp/Utilities/**.swift"]

@@ -1,0 +1,93 @@
+/* 
+  Localizable.strings
+  BibleGamifiedApp
+
+  Created by indianic on 19/11/21.
+  
+*/
+
+"kSUBMIT" = "SUBMIT";
+"kNext" = "NEXT";
+
+
+//Main Dashboard
+"kGames" = "Games";
+"kVideos" = "Videos";
+"kEvents" = "Events";
+"kLeadershipBoard" = "Leadership Board";
+"kChallenges" = "Challenges";
+"kReferFriend" = "Refer a Friend";
+"kiOSAppStoreLink" = "iOS AppStore Link";
+
+
+/// login - validation messages
+"kemailUsername" = "Enter email / username to continue!";
+"kemailValid" = "Enter valid email to continue!";
+"kpassword" = "Enter password to continue!";
+"kconfirmpassword" = "Enter confirm password to continue!";
+"kpassowordnotsame" = "Password and confirm password should be same!";
+"kCheckTermsCondition" = "Please check the terms & condition";
+
+// forogot password
+"kemail" = "Enter valid email to continue!";
+"ksecond" = "Seconds";
+
+/// register
+"kfullname" = "Enter full name to continue!";
+"kuserName" = "Enter user name to continue!";
+"kbirthdate" = "Select Birthdate to continue!";
+"kparentsemail" = "Enter valid parents email to continue!";
+"kbirthdateValid" = "Age Must be between 3 and 100 years old";
+"kvalidPassoword"  = "Your password must be of\n- length should be of 8 - 16 characters.\n- contains at least one alphabet.\n- contains at least one numeric character. \n- must not contain spaces or emoji Ex. Test@123.";
+//"kvalidPassoword"  = "Your password  must be 8 to 16 characters long including 1 uppercase letter, 1 special character, and alphanumeric characters Ex. Test@123.";
+"kNameLimit" =  "Full name must be 3 to 20 characters long!";
+"kUserNameLimit" =  "User name must be 3 to 20 characters long!";
+"kEmailsame" =  "Parents email and user email should not be same!";
+"kEditProfile" = "Edit Profile";
+"kComProfile" = "Complete Profile";
+
+// Avatar Creation
+// Avatar Creation
+"kSetupAvatar" = "STEPS";
+"kSelectSkinTone" = "Choose your skin tone";
+"kSelectFaceType" = "Choose your face style";
+"kSelectHairStyle" = "Choose your hair style";
+"kSelectGlasses" = "Choose your glasses";
+"kPrevious" = "PREVIOUS" ;
+"avatar_creation" = "Avatar Creation";
+"kmale" = "Male";
+"kfemale" = "Female";
+"btn_submit" = "SUBMIT";
+"btn_next" = "NEXT";
+
+"kDone" = "Done";
+"kCancel" = "Cancel";
+
+// back action
+"kQuitGameMsg" = "Are you sure you want to quit this game?";
+
+//logout
+"kLogout" = "Are you sure you want to Logout?";
+"btn_yes" = "Yes";
+"btn_cancel" = "Cancel";
+"k_appName" = "BibleGamifiedApp";
+
+"k_levelIncomplte" = "Incomplete Level";
+"k_allLevelComplete" = "All level completed";
+"kRefralCodeCopyClipbardMSG" = "Referral code is copied to clipboard!";
+
+"kunlockLevel" = "Unlock Level";
+"kstar" = "STAR";
+"kUnderDevelopmentMSG" = "This feature is under development.";
+
+// In-app purchase realted messages..
+"kRestoreFailedTitle" = "Restore failed";
+"kUnknownErrorMsg" = "Unknown error. Please contact support.";
+
+"kPurchasesRestoredTitle" = "Purchases Restored";
+"kPurchasesRestoredMSG" = "All purchases have been restored.";
+
+"kNothingRestoreTitle" = "Nothing to restore";
+"kNothingRestoreMSG" = "No previous purchases were found.";
+
+

@@ -1,0 +1,77 @@
+# Rule inclusion:
+
+# disabled_rules: Disable rules from the default enabled set.
+# opt_in_rules: Enable rules not from the default set.
+# whitelist_rules: Acts as a whitelist, only the rules specified in this list will be enabled. Can not be specified alongside disabled_rules or opt_in_rules.
+# analyzer_rules: This is an entirely separate list of rules that are only run by the analyze command. All analyzer rules are opt-in, so this is the only configurable rule list (there is no disabled/whitelist equivalent).
+
+disabled_rules: # rule identifiers to exclude from running
+  - line_length
+  - trailing_whitespace
+  - variable_name_min_length
+  - trailing_semicolon
+  - nesting
+  - trailing_newline
+  - empty_count
+opt_in_rules: # some rules are only opt-in
+  - missing_docs
+  - cyclomatic_complexity
+
+excluded:
+  - Carthage
+  - Pods
+
+large_tuple: 4
+
+# Cyclomatic complexity is a source code complexity measurement that is being
+# correlated to a number of coding errors. It is calculated by developing a
+# Control Flow Graph of the code that measures the number of
+# linearly-independent paths through a program module.
+      # 01 to 10 – Minimal Risk
+      # 11 to 20 – Moderate Risk
+      # 21 to 50 – High Risk
+      # Over 50 – Very High Risk
+cyclomatic_complexity:
+  warning: 8
+  error: 8
+  ignores_case_statements: true
+
+type_body_length:
+  - 1200 # Warn
+  - 1200 # Error
+
+type_name: # Class name should be started with uppercase and min lenght and max length
+  min_length: 5 # only warning
+  max_length: # warning and error
+    error: 30
+
+file_length:
+  - 1200 # Warn
+  - 1200 # Error
+
+type_name: # Class name should be started with uppercase and min lenght and max length
+  min_length: 5 # only warning
+  max_length: # warning and error
+    error: 30
+
+function_body_length:
+  - 200 # Warn
+  - 300 # Error
+
+force_cast: warning # implicitly
+
+identifier_name:
+  severity: warning
+  min_length: 2 # only warning
+  max_length: 80 # warning
+  validates_start_with_lowercase: true
+
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit, html, emoji)
+# custom_rules:
+#   comment_on_code:
+#     regex: 'func (?<!:|\/)\/\/\h*[a-z.](?!wiftlint)'
+#     message: "Comment starting with lowercase letter - did you forget to delete old code?"
+#   multiline_commented_code:
+#     regex: '^\s*[a-z]'
+#     match_kinds: comment
+#     message: "Comment starting with lowercase letter - did you forget to delete old code?"
